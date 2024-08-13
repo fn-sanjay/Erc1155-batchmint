@@ -17,14 +17,13 @@ contract InteractWithNFT is Script {
         vm.startBroadcast();
 
         // Example of minting tokens
-        address to =  0xe321Fc4001dF24AF1Eb60E57FEf1c7DfFD665ED4;
+        address to = 0xe321Fc4001dF24AF1Eb60E57FEf1c7DfFD665ED4;
         uint256[] memory ids = new uint256[](2); // Declare and initialize array for token IDs
         uint256[] memory amounts = new uint256[](2); // Declare and initialize array for token amounts
 
         ids[0] = 1;
         ids[1] = 2;
 
-    
         amounts[0] = 100;
         amounts[1] = 200;
 

@@ -14,10 +14,7 @@ interface IERC1155 {
 
     function setApprovalForAll(address operator, bool approved) external;
 
-    function isApprovedForAll(address owner, address operator)
-        external
-        view
-        returns (bool);
+    function isApprovedForAll(address owner, address operator) external view returns (bool);
 
     function balanceOfBatch(address[] calldata owners, uint256[] calldata ids)
         external
@@ -37,18 +34,10 @@ interface IERC1155TokenReceiver {
 
 contract ERC1155 is IERC1155, Ownable {
     event TransferBatch(
-        address indexed operator,
-        address indexed from,
-        address indexed to,
-        uint256[] ids,
-        uint256[] values
+        address indexed operator, address indexed from, address indexed to, uint256[] ids, uint256[] values
     );
 
-    event ApprovalForAll(
-        address indexed owner,
-        address indexed operator,
-        bool approved
-    );
+    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
 
     event URI(string value, uint256 indexed id);
 
@@ -85,10 +74,7 @@ contract ERC1155 is IERC1155, Ownable {
         uint256[] calldata values,
         bytes calldata data
     ) external {
-        require(
-            msg.sender == from || isApprovedForAll[from][msg.sender],
-            "not approved"
-        );
+        require(msg.sender == from || isApprovedForAll[from][msg.sender], "not approved");
         require(to != address(0), "to = 0 address");
         require(ids.length == values.length, "ids length != values length");
 
@@ -101,9 +87,8 @@ contract ERC1155 is IERC1155, Ownable {
 
         if (to.code.length > 0) {
             require(
-                IERC1155TokenReceiver(to).onERC1155BatchReceived(
-                    msg.sender, from, ids, values, data
-                ) == IERC1155TokenReceiver.onERC1155BatchReceived.selector,
+                IERC1155TokenReceiver(to).onERC1155BatchReceived(msg.sender, from, ids, values, data)
+                    == IERC1155TokenReceiver.onERC1155BatchReceived.selector,
                 "unsafe transfer"
             );
         }
@@ -125,12 +110,7 @@ contract ERC1155 is IERC1155, Ownable {
         }
     }
 
-    function _batchMint(
-        address to,
-        uint256[] calldata ids,
-        uint256[] calldata values,
-        bytes calldata data
-    ) internal {
+    function _batchMint(address to, uint256[] calldata ids, uint256[] calldata values, bytes calldata data) internal {
         require(to != address(0), "to = 0 address");
         require(ids.length == values.length, "ids length != values length");
 
@@ -142,19 +122,14 @@ contract ERC1155 is IERC1155, Ownable {
 
         if (to.code.length > 0) {
             require(
-                IERC1155TokenReceiver(to).onERC1155BatchReceived(
-                    msg.sender, address(0), ids, values, data
-                ) == IERC1155TokenReceiver.onERC1155BatchReceived.selector,
+                IERC1155TokenReceiver(to).onERC1155BatchReceived(msg.sender, address(0), ids, values, data)
+                    == IERC1155TokenReceiver.onERC1155BatchReceived.selector,
                 "unsafe transfer"
             );
         }
     }
 
-    function _batchBurn(
-        address from,
-        uint256[] calldata ids,
-        uint256[] calldata values
-    ) internal {
+    function _batchBurn(address from, uint256[] calldata ids, uint256[] calldata values) internal {
         require(from != address(0), "from = 0 address");
         require(ids.length == values.length, "ids length != values length");
 
